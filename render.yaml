@@ -4,7 +4,7 @@ services:
     env: node
     plan: free
     buildCommand: 'npm install'
-    startCommand: 'npm start'
+    startCommand: 'npm run dev'
     envVars:
       - key: MONGO_URI
         value: mongodb+srv://sumit:098sumit@cluster0.cfeqt.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
