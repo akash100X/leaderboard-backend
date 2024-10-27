@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: leaderboard-backend
+    env: node
+    plan: free
+    buildCommand: 'npm install'
+    startCommand: 'npm start'
+    envVars:
+      - key: MONGO_URI
+        value: mongodb+srv://sumit:098sumit@cluster0.cfeqt.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+      - key: SECRET_KEY
+        value: ohuihi34ehrgoj
