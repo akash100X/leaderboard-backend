@@ -1,38 +1,45 @@
 import express from "express";
 import { connectDb } from "./config/dbConenction.js";
-import cors from "cors"
+import cors from "cors";
 // *********** All-Routes *************
 import auth from "./routes/auth.routes.js";
 import user from "./routes/user.routes.js";
-import "dotenv/config"
 // *********** All-Routes *************
-
 import cookieParser from "cookie-parser";
+
 const app = express();
+
 // Use cors middleware
 app.use(cors());
-
 app.use(
   cors({
-    origin: "*", // Replace with the frontend's URL (React app)
-    methods: "GET,POST,PUT,DELETE,PATCH", // Allowed methods
+    origin: "*",
+    methods: "GET,POST,PUT,DELETE,PATCH",
   })
 );
 
-//middle wares
+// Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // *********** All-Routes *************
-
 app.get("/", (req, res) => {
+  console.log("GET /");
   res.json("I'm coming from backend");
 });
-app.use("/api/auth/v1", auth);
-app.use("/api/user/v1", user);
 
-// for wrong apis
+app.use("/api/auth/v1", (req, res, next) => {
+  console.log("Auth Route Hit");
+  next();
+}, auth);
+
+app.use("/api/user/v1", (req, res, next) => {
+  console.log("User Route Hit");
+  next();
+}, user);
+
+// For wrong APIs
 app.use((req, res) => {
   res.status(404).json({
     success: false,
@@ -49,8 +56,10 @@ app.use((err, req, res, next) => {
     error: err.message,
   });
 });
+
+// Listen on the correct port
 const PORT = process.env.PORT || 7000;
 app.listen(PORT, async () => {
-  console.log("Server is running on port 7000");
+  console.log(`Server is running on port ${PORT}`);
   await connectDb();
 });
